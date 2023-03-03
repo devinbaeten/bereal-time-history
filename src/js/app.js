@@ -280,7 +280,7 @@ function refresh() {
 	
 	$.ajax({
 			dataType: "json",
-			url: "https://bereal.devin.fun/data/current_times",
+			url: "https://apis.devinbaeten.com/prod/app/bereal/data/current_times",
 			crossDomain: true,
 			jsonpCallback: "callback",
 			success: callback,
@@ -584,7 +584,7 @@ function refreshHistory() {
 	
 	$.ajax({
 			dataType: "json",
-			url: "https://bereal.devin.fun/data/historic_times",
+			url: "https://apis.devinbaeten.com/prod/app/bereal/data/historic_times",
 			crossDomain: true,
 			jsonpCallback: "callback",
 			success: callback,
