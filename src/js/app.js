@@ -1,9 +1,236 @@
 //
 //	loader.js
-//	DB US-East 1 WS
+//	BeReal Time History
 //
 //	Created by Devin Baeten on 2022-09-30.
 //
+
+import $ from 'jquery';
+import moment from 'moment-timezone';
+import Chart from 'chart.js/auto';
+
+// Charts
+
+// US-CENTRAL
+var usCentralChartD = [];
+var usCentralChart = new Chart($('#uscChart'), {
+	type: 'line',
+	data: {
+		datasets: [{
+			data: usCentralChartD,
+			borderColor: 'rgba(39, 0, 81, .75)'
+		}]
+	},
+	options: {
+		responsive: true,
+		scales: {
+			y: {
+				type: 'linear',
+				position: 'left',
+				ticks: {
+					min: 0,
+					max: 86400000,
+					stepSize: 3.6e+6,
+					beginAtZero: true,
+					callback: value => {
+						let date = moment.utc(value);
+						if (date.diff(moment('1970-02-01 23:59:59'), 'minutes') === 0) {
+							return null;
+						}
+
+						return date.format('h A');
+					}
+				}
+			},
+			x: {
+				reverse: true
+			}
+		},
+		plugins: {
+			subtitle: {
+				display: true,
+				text: 'us-central (America/Chicago)'
+			},
+			legend: {
+				display: false
+			},
+			tooltip: {
+				callbacks: {
+					label: function(context) {
+						let ms = context.parsed.y
+						return moment.utc(ms).format("h:mm:ss a")
+					}
+				}
+			}
+		}
+	}
+});
+
+// EUROPE-WEST
+var europeWestChartD = [];
+var europeWestChart = new Chart($('#euwChart'), {
+	type: 'line',
+	data: {
+		datasets: [{
+			data: europeWestChartD,
+			borderColor: 'rgba(39, 0, 81, .75)'
+		}]
+	},
+	options: {
+		responsive: true,
+		scales: {
+			y: {
+				type: 'linear',
+				position: 'left',
+				ticks: {
+					min: 0,
+					max: 86400000,
+					stepSize: 3.6e+6,
+					beginAtZero: true,
+					callback: value => {
+						let date = moment.utc(value);
+						if (date.diff(moment('1970-02-01 23:59:59'), 'minutes') === 0) {
+							return null;
+						}
+
+						return date.format('h A');
+					}
+				}
+			},
+			x: {
+				reverse: true
+			}
+		},
+		plugins: {
+			subtitle: {
+				display: true,
+				text: 'europe-west (Europe/Paris)'
+			},
+			legend: {
+				display: false
+			},
+			tooltip: {
+				callbacks: {
+					label: function(context) {
+						let ms = context.parsed.y
+						return moment.utc(ms).format("h:mm:ss a")
+					}
+				}
+			}
+		}
+	}
+});
+
+// ASIA-EAST
+var asiaEastChartD = [];
+var asiaEastChart = new Chart($('#aeChart'), {
+	type: 'line',
+	data: {
+		datasets: [{
+			data: asiaEastChartD,
+			borderColor: 'rgba(39, 0, 81, .75)'
+		}]
+	},
+	options: {
+		responsive: true,
+		scales: {
+			y: {
+				type: 'linear',
+				position: 'left',
+				ticks: {
+					min: 0,
+					max: 86400000,
+					stepSize: 3.6e+6,
+					beginAtZero: true,
+					callback: value => {
+						let date = moment.utc(value);
+						if (date.diff(moment('1970-02-01 23:59:59'), 'minutes') === 0) {
+							return null;
+						}
+
+						return date.format('h A');
+					}
+				}
+			},
+			x: {
+				reverse: true
+			}
+		},
+		plugins: {
+			subtitle: {
+				display: true,
+				text: 'asia-east (Australia/Sydney)'
+			},
+			legend: {
+				display: false
+			},
+			tooltip: {
+				callbacks: {
+					label: function(context) {
+						let ms = context.parsed.y
+						return moment.utc(ms).format("h:mm:ss a")
+					}
+				}
+			}
+		}
+	}
+});
+
+// ASIA-WEST
+var asiaWestChartD = [];
+var asiaWestChart = new Chart($('#awChart'), {
+	type: 'line',
+	data: {
+		datasets: [{
+			data: asiaWestChartD,
+			borderColor: 'rgba(39, 0, 81, .75)'
+		}]
+	},
+	options: {
+		responsive: true,
+		scales: {
+			y: {
+				type: 'linear',
+				position: 'left',
+				ticks: {
+					min: 0,
+					max: 86400000,
+					stepSize: 3.6e+6,
+					beginAtZero: true,
+					callback: value => {
+						let date = moment.utc(value);
+						if (date.diff(moment('1970-02-01 23:59:59'), 'minutes') === 0) {
+							return null;
+						}
+
+						return date.format('h A');
+					}
+				}
+			},
+			x: {
+				reverse: true
+			}
+		},
+		plugins: {
+			subtitle: {
+				display: true,
+				text: 'asia-west (Asia/Karachi)'
+			},
+			legend: {
+				display: false
+			},
+			tooltip: {
+				callbacks: {
+					label: function(context) {
+						let ms = context.parsed.y
+						return moment.utc(ms).format("h:mm:ss a")
+					}
+				}
+			}
+		}
+	}
+});
+
 
 // Memory
 var retries = 0;
@@ -53,7 +280,8 @@ function refresh() {
 	
 	$.ajax({
 			dataType: "json",
-			url: "data/current_times",
+			url: "https://bereal.devin.fun/data/current_times",
+			crossDomain: true,
 			jsonpCallback: "callback",
 			success: callback,
 			error: failed
@@ -356,7 +584,8 @@ function refreshHistory() {
 	
 	$.ajax({
 			dataType: "json",
-			url: "data/historic_times",
+			url: "https://bereal.devin.fun/data/historic_times",
+			crossDomain: true,
 			jsonpCallback: "callback",
 			success: callback,
 			error: failed
@@ -524,3 +753,5 @@ function refreshHistory() {
 	}
 	
 }
+
+begin();

@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>BeReal Time History</title>
+	<meta name="description" content="See when BeReal notifications were sent in every region. Data updates in real-time. Created by Devin Baeten">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<link rel="apple-touch-icon" href="/assets/ios-icon-332a38a8.webp">
+	<meta name="apple-mobile-web-app-title" content="Moments">
+	<link rel="icon" type="image/x-icon" href="favicon.ico">
+  <script type="module" crossorigin src="/assets/index-a0496307.js"></script>
+  <link rel="stylesheet" href="/assets/index-19c42dc8.css">
+</head>
+<body>
+	<main>
+		<nav class="navbar bg-light">
+			<div class="container">
+				<span class="navbar-brand mb-0 h1 hstack">
+					<img src="/assets/logo-fbea86ef.webp" alt="Logo" height="45px" class="me-2">
+					<div class="vstack">
+						<span class="fw-semibold">BeReal Time History</span>
+						<span class="fs-6 text-secondary">By Devin Baeten</span>
+					</div>
+				</span>
+				<div class="badge bg-danger fs-5">
+				LIVE
+				</div>
+			</div>
+		</nav>
+		<div class="container mt-3 mb-5">
+			<div class="alert alert-danger d-none">
+				<span>
+					<b>Warning:</b>
+					 This site is actively being worked on at this very moment. Please excuse any issues as I work to improve your experience.
+				</span>
+			</div>
+			<div class="alert alert-primary">
+				<span>
+					<b>Coming Soon:</b>
+					 Introducing the BeReal Time History API. You will be able to request an API key which enables access the full extent of my historical data, on-demand!
+				</span>
+			</div>
+			<div class="alert mb-3 bg-secondary text-light d-none">Today's planned maintenance has been cancelled.</div>
+			<div class="alert mb-3 bg-danger text-light d-none" id="reqError"></div>
+			<nav class="mb-3">
+				<div class="nav nav-tabs" id="nav-tab" role="tablist">
+					<button class="nav-link active" id="nav-dashboard-tab" data-bs-toggle="tab" data-bs-target="#dashboard" type="button" role="tab" aria-controls="dashboard" aria-selected="true">Dashboard</button>
+					<button class="nav-link" id="nav-about-tab" data-bs-toggle="tab" data-bs-target="#about" type="button" role="tab" aria-controls="about" aria-selected="false">About</button>
+					<button class="nav-link d-none" id="nav-api-tab" data-bs-toggle="tab" data-bs-target="#api" type="button" role="tab" aria-controls="api" aria-selected="false">API</button>
+					<button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Contact</button>
+				</div>
+			</nav>
+			<div class="tab-content" id="nav-tabContent">
+				<div id="dashboard" class="tab-pane fade show active" role="tabpanel" aria-labelledby="nav-dashboard-tab" tabindex="0">
+					<div class="card mb-3">
+						<div class="card-body">
+							<div class="hstack justify-content-between">
+								<h1>
+									<i class="bi bi-app-indicator me-1"></i>
+
+									Latest Notifications
+								</h1>
+								<div class="vstack m-0 p-0">
+									<div class="text-end">
+										<div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+											<input type="radio" class="btn-check" name="btnradio" id="user_prefs_live_regional" autocomplete="off" checked>
+											<label class="btn btn-outline-primary" for="user_prefs_live_regional">Regional</label>
+											<input type="radio" class="btn-check" name="btnradio" id="user_prefs_live_local" autocomplete="off">
+											<label class="btn btn-outline-primary" for="user_prefs_live_local">Local</label>
+										</div>
+									</div>
+								</div>
+							</div>
+							<span class="d-none">Tiles are updated in real-time. Press "Notify Me" to subscribe to alerts for a particular region, via Pushover.</span>
+							<div class="row align-items-start gap-2 p-2">
+								<div class="col-xl-2 card card-body gap-2" id="us_central_live_card">
+									<div class="hstack justify-content-between">
+										<div class="vstack">
+											<h3 class="mb-0">Americas</h3>
+											<i class="small text-secondary">
+												<i class="bi bi-clock"></i>
+
+												America/Chicago
+											</i>
+										</div>
+										<div class="vstack">
+											<span class="text-secondary text-end" id="us_central_live_clock">--:--:-- XM</span>
+											<span class="text-secondary text-end small">Current Time</span>
+										</div>
+									</div>
+									<div class="alert alert-danger fs-6 p-2 m-0 d-none" id="us_central_live_alert_dy">
+										<i class="bi bi-exclamation-triangle-fill me-1"></i>
+
+										Delivered Yesterday
+									</div>
+									<div class="alert alert-success fs-6 p-2 m-0 d-none" id="us_central_live_alert_dt">
+										<i class="bi bi-check-circle-fill me-1"></i>
+
+										Delivered Today
+									</div>
+									<div class="alert alert-warning fs-6 p-2 m-0 d-none text-center" id="us_central_live_alert_ttbr">
+										<i class="bi bi-exclamation-triangle-fill me-1"></i>
+
+										Time to BeReal.
+										<i class="bi bi-exclamation-triangle-fill ms-1"></i>
+										<br/>
+										<span id="us_central_live_alert_ttbr_clock" class="fw-bold fs-4">00:00</span>
+									</div>
+									<div class="card p-2">
+										<div class="vstack text-center">
+											<span class="font-monospace fs-3" id="us_central_live_latest_ts">
+											00:00:00 XM
+											</span>
+											<span class="text-secondary small" id="us_central_live_latest_rel">
+											2m ago
+											</span>
+										</div>
+									</div>
+									<div class="hstack gap-2">
+										<a class="btn btn-outline-primary w-100" href="https://pushover.net/subscribe/BeRealAmericas-hwv771swtk3kbti" target="blank">Notify Me</a>
+										<a class="btn btn-outline-secondary w-100" href="#uscChart" id="europe_west_live_cta">History</a>
+										<a class="btn btn-outline-secondary w-100 d-none">More Info</a>
+									</div>
+								</div>
+								<div class="col-xl-2 card card-body gap-2" id="europe_west_live_card">
+									<div class="hstack justify-content-between">
+										<div class="vstack">
+											<h3 class="mb-0">Europe</h3>
+											<i class="small text-secondary">
+												<i class="bi bi-clock"></i>
+
+												Europe/Paris
+											</i>
+										</div>
+										<div class="vstack">
+											<span class="text-secondary text-end" id="europe_west_live_clock">--:--:-- XM</span>
+											<span class="text-secondary text-end small">Current Time</span>
+										</div>
+									</div>
+									<div class="alert alert-danger fs-6 p-2 m-0 d-none" id="europe_west_live_alert_dy">
+										<i class="bi bi-exclamation-triangle-fill me-1"></i>
+
+										Delivered Yesterday
+									</div>
+									<div class="alert alert-success fs-6 p-2 m-0 d-none" id="europe_west_live_alert_dt">
+										<i class="bi bi-check-circle-fill me-1"></i>
+
+										Delivered Today
+									</div>
+									<div class="alert alert-warning fs-6 p-2 m-0 d-none text-center" id="europe_west_live_alert_ttbr">
+										<i class="bi bi-exclamation-triangle-fill me-1"></i>
+
+										Time to BeReal.
+										<i class="bi bi-exclamation-triangle-fill ms-1"></i>
+										<br/>
+										<span id="europe_west_live_alert_ttbr_clock" class="fw-bold fs-4">00:00</span>
+									</div>
+									<div class="card p-2">
+										<div class="vstack text-center">
+											<span class="font-monospace fs-3" id="europe_west_live_latest_ts">
+											00:00:00 XM
+											</span>
+											<span class="text-secondary small" id="europe_west_live_latest_rel">
+											2m ago
+											</span>
+										</div>
+									</div>
+									<div class="hstack gap-2">
+										<a class="btn btn-outline-primary w-100" href="https://pushover.net/subscribe/BeRealEurope-5tghe75v5fqbesr" target="blank">Notify Me</a>
+										<a class="btn btn-outline-secondary w-100" href="#euwChart" id="europe_west_live_cta">History</a>
+										<a class="btn btn-outline-secondary w-100 d-none">More Info</a>
+									</div>
+								</div>
+								<div class="col-xl-2 card card-body gap-2" id="asia_east_live_card">
+									<div class="hstack justify-content-between">
+										<div class="vstack">
+											<h3 class="mb-0">East Asia</h3>
+											<i class="small text-secondary">
+												<i class="bi bi-clock"></i>
+
+												Australia/Sydney
+											</i>
+										</div>
+										<div class="vstack">
+											<span class="text-secondary text-end" id="asia_east_live_clock">--:--:-- XM</span>
+											<span class="text-secondary text-end small">Current Time</span>
+										</div>
+									</div>
+									<div class="alert alert-danger fs-6 p-2 m-0 d-none" id="asia_east_live_alert_dy">
+										<i class="bi bi-exclamation-triangle-fill me-1"></i>
+
+										Delivered Yesterday
+									</div>
+									<div class="alert alert-success fs-6 p-2 m-0 d-none" id="asia_east_live_alert_dt">
+										<i class="bi bi-check-circle-fill me-1"></i>
+
+										Delivered Today
+									</div>
+									<div class="alert alert-warning fs-6 p-2 m-0 d-none text-center" id="asia_east_live_alert_ttbr">
+										<i class="bi bi-exclamation-triangle-fill me-1"></i>
+
+										Time to BeReal.
+										<i class="bi bi-exclamation-triangle-fill ms-1"></i>
+										<br/>
+										<span id="asia_east_live_alert_ttbr_clock" class="fw-bold fs-4">00:00</span>
+									</div>
+									<div class="card p-2">
+										<div class="vstack text-center">
+											<span class="font-monospace fs-3" id="asia_east_live_latest_ts">
+											00:00:00 XM
+											</span>
+											<span class="text-secondary small" id="asia_east_live_latest_rel">
+											2m ago
+											</span>
+										</div>
+									</div>
+									<div class="hstack gap-2">
+										<a class="btn btn-outline-primary w-100" href="https://pushover.net/subscribe/BeRealEastAsia-yiqi3f73cr5jpo3" target="blank">Notify Me</a>
+										<a class="btn btn-outline-secondary w-100" href="#aeChart" id="europe_west_live_cta">History</a>
+										<a class="btn btn-outline-secondary w-100 d-none">More Info</a>
+									</div>
+								</div>
+								<div class="col-xl-2 card card-body gap-2" id="asia_west_live_card">
+									<div class="hstack justify-content-between">
+										<div class="vstack">
+											<h3 class="mb-0">West Asia</h3>
+											<i class="small text-secondary">
+												<i class="bi bi-clock"></i>
+
+												Asia/Karachi
+											</i>
+										</div>
+										<div class="vstack">
+											<span class="text-secondary text-end" id="asia_west_live_clock">--:--:-- XM</span>
+											<span class="text-secondary text-end small">Current Time</span>
+										</div>
+									</div>
+									<div class="alert alert-danger fs-6 p-2 m-0 d-none" id="asia_west_live_alert_dy">
+										<i class="bi bi-exclamation-triangle-fill me-1"></i>
+
+										Delivered Yesterday
+									</div>
+									<div class="alert alert-success fs-6 p-2 m-0 d-none" id="asia_west_live_alert_dt">
+										<i class="bi bi-check-circle-fill me-1"></i>
+
+										Delivered Today
+									</div>
+									<div class="alert alert-warning fs-6 p-2 m-0 d-none text-center" id="asia_west_live_alert_ttbr">
+										<i class="bi bi-exclamation-triangle-fill me-1"></i>
+
+										Time to BeReal.
+										<i class="bi bi-exclamation-triangle-fill ms-1"></i>
+										<br/>
+										<span id="asia_west_live_alert_ttbr_clock" class="fw-bold fs-4">00:00</span>
+									</div>
+									<div class="card p-2">
+										<div class="vstack text-center">
+											<span class="font-monospace fs-3" id="asia_west_live_latest_ts">
+											00:00:00 XM
+											</span>
+											<span class="text-secondary small" id="asia_west_live_latest_rel">
+											2m ago
+											</span>
+										</div>
+									</div>
+									<div class="hstack gap-2">
+										<a class="btn btn-outline-primary w-100" href="https://pushover.net/subscribe/BeRealWestAsia-nrt8pnjm3xwqzpr" target="blank">Notify Me</a>
+										<a class="btn btn-outline-secondary w-100" href="#awChart" id="europe_west_live_cta">History</a>
+										<a class="btn btn-outline-secondary w-100 d-none">More Info</a>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+					<div class="card" id="history">
+						<div class="card-body">
+							<div class="hstack justify-content-between">
+								<h1>
+									<i class="bi bi-clock-history me-1"></i>
+
+									Historical Data
+								</h1>
+								<div class="vstack m-0 p-0 text-end">
+									<div>
+										<a class="btn btn-outline-secondary" href="https://bereal.devin.fun/api/moments/history/csv">
+											<i class="bi bi-file-earmark-arrow-down-fill me-1"></i>
+
+											Export CSV
+										</a>
+									</div>
+								</div>
+							</div>
+
+							<span>
+								The past 90 days of BeReal moments (in each region) are plotted in their own charts below. The indicated times are relative to the time zone in which BeReal considers to be the origin time zone for each region; They are denoted within the caption above each graph. Chart data is refreshed every 15s.
+							</span>
+
+							<div class="card card-body mt-3">
+								<canvas id="uscChart">
+								</canvas>
+							</div>
+							<div class="card card-body mt-3">
+								<canvas id="euwChart">
+								</canvas>
+							</div>
+							<div class="card card-body mt-3">
+								<canvas id="aeChart">
+								</canvas>
+							</div>
+							<div class="card card-body mt-3">
+								<canvas id="awChart">
+								</canvas>
+							</div>
+							<div class="card card-body mt-3 d-none">
+								<canvas id="aggregateChart">
+								</canvas>
+								<!-- <script type="9c0659b17ca7c662b1f1c9e2-text/javascript">
+								var aggregateChart = new Chart($('#aggregateChart'), {
+									type: 'line',
+									data: {
+										datasets: [
+										{
+											data: usCentralChartD,
+											borderColor: 'rgba(39, 0, 81, .75)'
+										},
+										{
+											data: europeWestChartD,
+											borderColor: 'rgba(39, 0, 81, .75)'
+										},
+										{
+											data: asiaEastChartD,
+											borderColor: 'rgba(39, 0, 81, .75)'
+										},
+										{
+											data: asiaWestChartD,
+											borderColor: 'rgba(39, 0, 81, .75)'
+										}
+										]
+									},
+									options: {
+										responsive: true,
+										scales: {
+											y: {
+												type: 'linear',
+												position: 'left',
+												ticks: {
+													min: 0,
+													max: 86400000,
+													stepSize: 3.6e+6,
+													beginAtZero: true,
+													callback: value => {
+														let date = moment.utc(value);
+														if (date.diff(moment('1970-02-01 23:59:59'), 'minutes') === 0) {
+															return null;
+														}
+
+														return date.format('h A');
+													}
+												}
+											},
+											x: {
+												reverse: true
+											}
+										},
+										plugins: {
+											subtitle: {
+												display: true,
+												text: 'aggregate (all regions)'
+											},
+											legend: {
+												display: false
+											},
+											tooltip: {
+												callbacks: {
+													label: function(context) {
+														let ms = context.parsed.y
+														return moment.utc(ms).format("h:mm:ss a")
+													}
+												}
+											}
+										}
+									}
+								});
+								</script> -->
+							</div>
+							<div class="row d-none">
+								<div class="col">
+									<div class="">
+										<div class="card-body">
+											<table class="table">
+												<thead>
+													<th role="columnheader">Americas</th>
+												</thead>
+												<tbody id="us-central-history">
+													<tr>
+														<td>
+														Loading...
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+								<div class="col">
+									<div class="">
+										<div class="card-body">
+											<table class="table">
+												<thead>
+													<th role="columnheader">Europe</th>
+												</thead>
+												<tbody id="europe-west-history">
+													<tr>
+														<td>
+														Loading...
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+								<div class="col">
+									<div class="">
+										<div class="card-body">
+											<table class="table">
+												<thead>
+													<th role="columnheader">East Asia</th>
+												</thead>
+												<tbody id="asia-east-history">
+													<tr>
+														<td>
+														Loading...
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+								<div class="col">
+									<div class="">
+										<div class="card-body">
+											<table class="table">
+												<thead>
+													<th role="columnheader">West Asia</th>
+												</thead>
+												<tbody id="asia-west-history">
+													<tr>
+														<td>
+														Loading...
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="about" class="tab-pane fade" role="tabpanel" aria-labelledby="nav-about-tab" tabindex="0">
+					<div class="card card-body">
+						<h2>Moments</h2>
+						<p>When BeReal sends out a notification in a particular region for the day, that event can be referred to as a "moment". You may also see this terminology used interchangeably with "notification(s)". "moment" is the technical term referenced in the BeReal API.</p>
+						<h2>Data Collection</h2>
+						<p>My server network asks BeReal for the latest moments in each region once per second and records new data as it becomes available; This means that my database is always up to date. I started collecting data in early September. As such, I am unable to provide any accurate data from an earlier time. To view my data, you can visit this site; On the dashboard tab, you can see the latest moments, as well as 90 days of history in each region respectively.</p>
+						<h2>Why?</h2>
+						<p>I started this project to help myself better understand how BeReal operates, and to make it easier for me to post my BeReals on-time. I continue to work on it because collecting data like this has allowed me to explore ways of visualizing and applying data in real-world applications. I do all of this on my own time, and I don't make any profits from it. If you appreciate what I have made and would like to help fund the project, you can donate to my Ko-Fi page using the widget in the bottom left corner of your screen.</p>
+					</div>
+				</div>
+				<div id="api" class="tab-pane fade" role="tabpanel" aria-labelledby="nav-api-tab" tabindex="0">
+					<div class="card card-body">
+						<h2>BTH API</h2>
+						<p>You must have an account before you can access the API. This requirement is in</p>
+					</div>
+				</div>
+				<div id="contact" class="tab-pane fade" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">
+					<div class="card card-body">
+						<h2>Contact The Developer</h2>
+						<p>Hi, I'm Devin.</p>
+						<p>
+							Send me an email at 
+							<a href="mailto:devin@devinbaeten.com">
+								devin@devinbaeten.com
+							</a>
+							 if you have any questions, comments, or concerns. I'd love to hear from you!
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+	<div class="container">
+		<footer class="py-3 my-4">
+			<ul class="nav justify-content-center border-bottom pb-3 mb-3 d-none">
+				<li class="nav-item">
+					<a class="nav-link px-3 text-muted" href="https://status.bereal.team/" target="blank">BeReal Server Status</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link px-3 text-muted" href="https://forms.gle/rJSJjxx2v64bWug28" target="blank">Share Feedback</a>
+				</li>
+			</ul>
+			<p class="text-center fw-bold mb-0">This site is NOT officially affiliated with BeReal</p>
+			<p class="text-center text-secondary">Data is collected and provided for educational purposes only</p>
+			<p class="text-center text-muted">© 2023 Devin Baeten</p>
+		</footer>
+	</div>
+	
+</body>
+</html>
