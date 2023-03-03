@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && mv ./src/dist ./docs",
+    "build": "vite build && mv -f ./src/dist/* ./docs/",
     "preview": "vite preview"
   },
   "devDependencies": {
