@@ -35,8 +35,8 @@
 			</div>
 			<div class="alert alert-primary">
 				<span>
-					<b>Coming Soon:</b>
-					 Introducing the BeReal Time History API. You will be able to request an API key which enables access the full extent of my historical data, on-demand!
+					<b>NEW:</b>
+					 Introducing the BeReal Time History API. You can now request an API key which enables access the full extent of my historical data, on-demand! Select the "API" tab below to get started.
 				</span>
 			</div>
 			<div class="alert mb-3 bg-secondary text-light d-none">Today's planned maintenance has been cancelled.</div>
@@ -45,7 +45,7 @@
 				<div class="nav nav-tabs" id="nav-tab" role="tablist">
 					<button class="nav-link active" id="nav-dashboard-tab" data-bs-toggle="tab" data-bs-target="#dashboard" type="button" role="tab" aria-controls="dashboard" aria-selected="true">Dashboard</button>
 					<button class="nav-link" id="nav-about-tab" data-bs-toggle="tab" data-bs-target="#about" type="button" role="tab" aria-controls="about" aria-selected="false">About</button>
-					<button class="nav-link d-none" id="nav-api-tab" data-bs-toggle="tab" data-bs-target="#api" type="button" role="tab" aria-controls="api" aria-selected="false">API</button>
+					<button class="nav-link" id="nav-api-tab" data-bs-toggle="tab" data-bs-target="#api" type="button" role="tab" aria-controls="api" aria-selected="false">API</button>
 					<button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Contact</button>
 				</div>
 			</nav>
@@ -472,8 +472,109 @@
 				</div>
 				<div id="api" class="tab-pane fade" role="tabpanel" aria-labelledby="nav-api-tab" tabindex="0">
 					<div class="card card-body">
-						<h2>BTH API</h2>
-						<p>You must have an account before you can access the API. This requirement is in</p>
+						<div class="d-flex mb-2">
+							<h2 class="mb-0 me-2">BeReal Time History API</h2>
+							<div class="d-flex flex-column justify-content-around">
+								<div class="badge bg-secondary fs-6">BETA</div>
+							</div>
+						</div>
+						<p>You can integrate real time and historic moment data into your own project. To get started, you'll need to request an API key. This is unique to your project and should not be shared.</p>
+						<div>
+							<a href="https://docs.google.com/forms/d/e/1FAIpQLSe4ZJE2wLwvCuG1MZi-0c4AsPoqC0eOGFHHZ-q1yTfnpwQI6g/viewform" target="blank" class="btn btn-primary">Request API Key</a>
+							<a href="https://docs.google.com/forms/d/e/1FAIpQLSdY_43_2YhXRn4uF9mL73pY-9Dxh4hGEFg4JBYpRvqsuDvKug/viewform" target="blank" class="btn btn-danger">Report Abuse</a>
+						</div>
+						<hr>
+						<h3>About</h3>
+						
+						<p>All requests should be directed towards the following domain. Do not use the endpoints utilized by this web application, as they are rate limited and intended for this site only.</p>
+						<code class="mb-3">https://bereal.devin.rest/</code>
+						
+					  	<p>To use the API, you need to supply an API key with each request. Please include the API key as a query parameter with the key name `api_key`, like so:</p>
+					  	<code class="mb-2">https://bereal.devin.rest/v1/moments/latest?api_key=YOUR_API_KEY</code>
+					  	<p>Both endpoints accept the <b>GET</b> http method.</p>
+					  	
+					  	<hr>
+					  	
+					  	<h3>Endpoint 1: /v1/moments/latest</h3>
+					  	<p>This endpoint returns the most recent moments in each region with the following JSON format:</p>
+					  	<pre>
+					  	<code>
+{
+	"regions": {
+		"us-central": {
+			"id": "MIB0Amg220yP7m0Te-p9s",
+			"ts": "1677871105",
+			"utc": "2023-03-03 19:18:25"
+		},
+		"europe-west": {
+			"id": "CMDRw4EAAVJbz7LQLt35w",
+			"ts": "1677846583",
+			"utc": "2023-03-03 12:29:43"
+		},
+		"asia-west": {
+			"id": "ZzR8YsOxZ6N-5JIY69UUw",
+			"ts": "1677837621",
+			"utc": "2023-03-03 10:00:21"
+		},
+		"asia-east": {
+			"id": "GSB1g5Ef39pRsdL0VZfPB",
+			"ts": "1677886896",
+			"utc": "2023-03-03 23:41:36"
+		}
+	},
+	"now": {
+		"ts": 1677897828,
+		"utc": "2023-03-04 02:43:48"
+	}
+}
+						  </code>
+						  </pre>
+						  <p>Example Request:</p>
+						  <code>https://bereal.devin.rest/v1/moments/latest?api_key=YOUR_API_KEY</code>
+						  
+						  <hr>
+						  
+						  <h3>Endpoint 2: /v1/moments/all</h3>
+						  <p>This endpoint returns current and previous moments in each region with the following JSON format. While the default limit for returned moments is 90 for each region, you can alter this behavior with the <b>limit</b> GET parameter; For the value, you can provide an integer to limit the moment count for each region, or "none", which removes the limit and will return all moments I have captured in each region. </p>
+						  <pre>
+						  <code>
+{
+	"regions": {
+		"us-central": [
+			{
+				"id": "MIB0Amg220yP7m0Te-p9s",
+				"ts": "1677871105",
+				"utc": "2023-03-03 19:18:25"
+			},
+			...
+		],
+		"europe-west": [
+			{
+				"id": "CMDRw4EAAVJbz7LQLt35w",
+				"ts": "1677846583",
+				"utc": "2023-03-03 12:29:43"
+			},
+			...
+		],
+		"asia-west": [
+			{
+				"id": "ZzR8YsOxZ6N-5JIY69UUw",
+				"ts": "1677837621",
+				"utc": "2023-03-03 10:00:21"
+			},
+			...
+		],
+		"asia-east": [
+			{
+				"id": "GSB1g5Ef39pRsdL0VZfPB",
+				"ts": "1677886896",
+				"utc": "2023-03-03 23:41:36"
+			},
+			...
+		]
+	}
+}
+						  </code></pre></div>
 					</div>
 				</div>
 				<div id="contact" class="tab-pane fade" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">
@@ -490,7 +591,6 @@
 					</div>
 				</div>
 			</div>
-		</div>
 	</main>
 	<div class="container">
 		<footer class="py-3 my-4">
