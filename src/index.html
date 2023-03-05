@@ -282,7 +282,7 @@
 								</h1>
 								<div class="vstack m-0 p-0 text-end">
 									<div>
-										<a class="btn btn-outline-secondary" href="https://bereal.devin.fun/api/moments/history/csv">
+										<a class="btn btn-outline-secondary" href="https://apis.devinbaeten.com/prod/app/bereal/api/moments/history/csv">
 											<i class="bi bi-file-earmark-arrow-down-fill me-1"></i>
 
 											Export CSV
@@ -473,9 +473,9 @@
 				<div id="api" class="tab-pane fade" role="tabpanel" aria-labelledby="nav-api-tab" tabindex="0">
 					<div class="card card-body">
 						<div class="d-flex mb-2">
-							<h2 class="mb-0 me-2">BeReal Time History API</h2>
+							<h2 class="mb-0 me-3">BeReal Time History API</h2>
 							<div class="d-flex flex-column justify-content-around">
-								<div class="badge bg-secondary fs-6">BETA</div>
+								<div class="badge bg-primary fs-6">NEW</div>
 							</div>
 						</div>
 						<p>You can integrate real time and historic moment data into your own project. To get started, you'll need to request an API key. This is unique to your project and should not be shared.</p>
@@ -484,97 +484,214 @@
 							<a href="https://docs.google.com/forms/d/e/1FAIpQLSdY_43_2YhXRn4uF9mL73pY-9Dxh4hGEFg4JBYpRvqsuDvKug/viewform" target="blank" class="btn btn-danger">Report Abuse</a>
 						</div>
 						<hr>
-						<h3>About</h3>
+						<h3>V1 Documentation</h3>
 						
 						<p>All requests should be directed towards the following domain. Do not use the endpoints utilized by this web application, as they are rate limited and intended for this site only.</p>
 						<code class="mb-3">https://bereal.devin.rest/</code>
 						
-					  	<p>To use the API, you need to supply an API key with each request. Please include the API key as a query parameter with the key name `api_key`, like so:</p>
-					  	<code class="mb-2">https://bereal.devin.rest/v1/moments/latest?api_key=YOUR_API_KEY</code>
-					  	<p>Both endpoints accept the <b>GET</b> http method.</p>
-					  	
-					  	<hr>
-					  	
-					  	<h3>Endpoint 1: /v1/moments/latest</h3>
-					  	<p>This endpoint returns the most recent moments in each region with the following JSON format:</p>
-					  	<pre>
-					  	<code>
-{
-	"regions": {
-		"us-central": {
-			"id": "MIB0Amg220yP7m0Te-p9s",
-			"ts": "1677871105",
-			"utc": "2023-03-03 19:18:25"
-		},
-		"europe-west": {
-			"id": "CMDRw4EAAVJbz7LQLt35w",
-			"ts": "1677846583",
-			"utc": "2023-03-03 12:29:43"
-		},
-		"asia-west": {
-			"id": "ZzR8YsOxZ6N-5JIY69UUw",
-			"ts": "1677837621",
-			"utc": "2023-03-03 10:00:21"
-		},
-		"asia-east": {
-			"id": "GSB1g5Ef39pRsdL0VZfPB",
-			"ts": "1677886896",
-			"utc": "2023-03-03 23:41:36"
-		}
-	},
-	"now": {
-		"ts": 1677897828,
-		"utc": "2023-03-04 02:43:48"
-	}
-}
-						  </code>
-						  </pre>
-						  <p>Example Request:</p>
-						  <code>https://bereal.devin.rest/v1/moments/latest?api_key=YOUR_API_KEY</code>
-						  
-						  <hr>
-						  
-						  <h3>Endpoint 2: /v1/moments/all</h3>
-						  <p>This endpoint returns current and previous moments in each region with the following JSON format. While the default limit for returned moments is 90 for each region, you can alter this behavior with the <b>limit</b> GET parameter; For the value, you can provide an integer to limit the moment count for each region, or "none", which removes the limit and will return all moments I have captured in each region. </p>
-						  <pre>
-						  <code>
-{
-	"regions": {
-		"us-central": [
-			{
-				"id": "MIB0Amg220yP7m0Te-p9s",
-				"ts": "1677871105",
-				"utc": "2023-03-03 19:18:25"
-			},
-			...
-		],
-		"europe-west": [
-			{
-				"id": "CMDRw4EAAVJbz7LQLt35w",
-				"ts": "1677846583",
-				"utc": "2023-03-03 12:29:43"
-			},
-			...
-		],
-		"asia-west": [
-			{
-				"id": "ZzR8YsOxZ6N-5JIY69UUw",
-				"ts": "1677837621",
-				"utc": "2023-03-03 10:00:21"
-			},
-			...
-		],
-		"asia-east": [
-			{
-				"id": "GSB1g5Ef39pRsdL0VZfPB",
-				"ts": "1677886896",
-				"utc": "2023-03-03 23:41:36"
-			},
-			...
-		]
-	}
-}
-						  </code></pre></div>
+						<p>To use the API, you need to supply an API key with each request. Please include the API key as a query parameter with the key name `api_key`, like so:</p>
+						<code class="mb-2">https://bereal.devin.rest/v1/moments/latest?api_key=YOUR_API_KEY</code>
+						<p>Both endpoints accept the <b>GET</b> http method.</p>
+						
+						<div class="card card-body">
+  							<h3 class="mb-3">/v1/moments/latest</h3>
+								<div class="card card-body mb-3">
+  								<h5>GET Parameters</h5>
+									<div class="table-responsive">
+	  								<table class="table table-striped">
+										<thead>
+		  								<tr>
+											<th>Name</th>
+											<th>Required</th>
+											<th>Value</th>
+		  								</tr>
+										</thead>
+										<tbody>
+		  								<tr>
+											<td>api_key</td>
+											<td>Yes</td>
+											<td>Your personal API Key</td>
+		  								</tr>
+										</tbody>
+	  								</table>
+									</div>
+								</div>
+								
+  								<p>Returns the most recent moments in each region with the following JSON format:</p>
+  								<pre class="bg-dark text-white rounded rounded-3">
+  								<code>
+  {
+	  "regions": {
+		  "us-central": {
+			  "id": "MIB0Amg220yP7m0Te-p9s",
+			  "ts": "1677871105",
+			  "utc": "2023-03-03 19:18:25"
+		  },
+		  "europe-west": {
+			  "id": "CMDRw4EAAVJbz7LQLt35w",
+			  "ts": "1677846583",
+			  "utc": "2023-03-03 12:29:43"
+		  },
+		  "asia-west": {
+			  "id": "ZzR8YsOxZ6N-5JIY69UUw",
+			  "ts": "1677837621",
+			  "utc": "2023-03-03 10:00:21"
+		  },
+		  "asia-east": {
+			  "id": "GSB1g5Ef39pRsdL0VZfPB",
+			  "ts": "1677886896",
+			  "utc": "2023-03-03 23:41:36"
+		  }
+	  },
+	  "now": {
+		  "ts": 1677897828,
+		  "utc": "2023-03-04 02:43:48"
+	  }
+  }
+							</code>
+							</pre>
+						  </div>
+						<div class="card card-body">
+						  <h3 class="mb-3">/v1/moments/all</h3>
+							<div class="card card-body mb-3">
+							  <h5>GET Parameters</h5>
+								<div class="table-responsive">
+								  <table class="table table-striped">
+									<thead>
+									  <tr>
+										<th>Name</th>
+										<th>Required</th>
+										<th>Value</th>
+									  </tr>
+									</thead>
+									<tbody>
+									  <tr>
+										<td>api_key</td>
+										<td>Yes</td>
+										<td>Your personal API Key</td>
+									  </tr>
+									  <tr>
+										<td>limit</td>
+										<td>No</td>
+										<td>Limits the results per region (most recent first). <b>Default is 90.</b> Limit can be removed by entering "NONE" as the value.</td>
+									  </tr>
+									  <tr>
+										<td>format</td>
+										<td>No</td>
+										<td>Changes the format of your data. <b>Default is JSON.</b> Options: "JSON", "CSV".</td>
+									  </tr>
+									</tbody>
+								  </table>
+								</div>
+							</div>
+							
+							  <p>Returns a collection of recent/all moments based on the parameters you set. Below is an example of the JSON format. You can see what the CSV format will look like by going to the dashboard tab, scrolling down to the "Historical Data" section, and exporting a CSV.</p>
+							  <pre class="bg-dark text-white rounded rounded-3">
+							  <code>
+  {
+	  "regions": {
+		  "us-central": [
+			  {
+				  "id": "MIB0Amg220yP7m0Te-p9s",
+				  "ts": "1677871105",
+				  "utc": "2023-03-03 19:18:25"
+			  },
+			  ... TRUNCATED ARRAYS FOR DEMO ...
+		  ],
+		  "europe-west": [
+			  {
+				  "id": "CMDRw4EAAVJbz7LQLt35w",
+				  "ts": "1677846583",
+				  "utc": "2023-03-03 12:29:43"
+			  },
+			  ...
+		  ],
+		  "asia-west": [
+			  {
+				  "id": "ZzR8YsOxZ6N-5JIY69UUw",
+				  "ts": "1677837621",
+				  "utc": "2023-03-03 10:00:21"
+			  },
+			  ...
+		  ],
+		  "asia-east": [
+			  {
+				  "id": "GSB1g5Ef39pRsdL0VZfPB",
+				  "ts": "1677886896",
+				  "utc": "2023-03-03 23:41:36"
+			  },
+			  ...
+		  ]
+	  }
+  }
+													</code>
+													</pre>
+												  </div>
+						<div class="card card-body">
+						  <div class="d-flex mb-3">
+							  <h3 class="mb-0 me-2">/v1/moments/lookup</h3>
+							  <div class="d-flex flex-column justify-content-around">
+								  <div class="badge bg-primary fs-6">NEW</div>
+							  </div>
+						  </div>
+							<div class="card card-body mb-3">
+							  <h5>GET Parameters</h5>
+								<div class="table-responsive">
+								  <table class="table table-striped">
+									<thead>
+									  <tr>
+										<th>Name</th>
+										<th>Required</th>
+										<th>Value</th>
+									  </tr>
+									</thead>
+									<tbody>
+									  <tr>
+										<td>api_key</td>
+										<td>Yes</td>
+										<td>Your personal API Key</td>
+									  </tr>
+									  <tr>
+										<td>time_zone</td>
+										<td>Yes</td>
+										<td>A list of supported time zones can be found <a href="https://bereal.devin.rest/v1/info/supported_time_zones">here</a>. You can find the origin time zone for each region on the dashboard.</td>
+									  </tr>
+									  <tr>
+										<td>date</td>
+										<td>Yes</td>
+										<td>Must be in YYYY-MM-DD format. The result will return the moment which occurred on this date within timezone you select. (Other endpoints return timestamps in UTC)</td>
+									  </tr>
+									  <tr>
+										<td>region</td>
+										<td>Yes</td>
+										<td>You can use any of these four supported regions: ["us-central", "europe-west", "asia-east", "asia-west"]</td>
+									  </tr>
+									</tbody>
+								  </table>
+								</div>
+							</div>
+							
+							  <p>Returns the most recent moments in each region with the following JSON format: ("America/Chicago" was the input for "time_zone" GET parameter in this example)<br/>
+						  		If there is no data for a particular query, the "id" key will return with the value "NO_DATA". This may happen if the date you provide falls before data began being collected, or if the moment for a particular date has not yet occurred.</p>
+							  <pre class="bg-dark text-white rounded rounded-3">
+							  <code>
+  {
+	  "region": "us-central",
+	  "id": "fz6OtUFp_elQJrGB2Rxkh",
+	  "UTC": {
+		  "unix": 1677963232,
+		  "timestamp": "2023-03-04 20:53:52"
+	  },
+	  "localized": {
+	  	  "timezone": "America\/Chicago",
+		  "timestamp": "2023-03-04 14:53:52"
+	  }
+  }
+							</code>
+							</pre>
+					  	</div>
+						 
+					  </div>
 					</div>
 				</div>
 				<div id="contact" class="tab-pane fade" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">
