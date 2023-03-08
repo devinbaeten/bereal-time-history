@@ -279,13 +279,17 @@ function refresh() {
 	// let asia_west = $("#asia-west").find("td");
 	
 	$.ajax({
-			dataType: "json",
-			url: "https://apis.devinbaeten.com/prod/app/bereal/data/current_times",
-			crossDomain: true,
-			jsonpCallback: "callback",
-			success: callback,
-			error: failed
+		    dataType: "json",
+		    url: "https://apis.devinbaeten.com/prod/app/bereal/data/current_times",
+		    crossDomain: true,
+		    jsonpCallback: "callback",
+		    headers: {
+			"brth-client-auth": turnstile.getResponse()
+		    },
+		    success: callback,
+		    error: failed
 	});
+
 	
 	function callback(result) {
 
@@ -587,6 +591,9 @@ function refreshHistory() {
 			url: "https://apis.devinbaeten.com/prod/app/bereal/data/historic_times",
 			crossDomain: true,
 			jsonpCallback: "callback",
+            headers: {
+			    "brth-client-auth": turnstile.getResponse()
+		    },
 			success: callback,
 			error: failed
 	});
