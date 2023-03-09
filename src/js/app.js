@@ -13,16 +13,9 @@ import Chart from 'chart.js/auto';
 
 var cftsr = "NONE";
 
-function setToken(token) {
-	$("#dashboard").removeClass("opacity-25");
-	setTimeout(function() {
-		$("#turnstileClearance").addClass("d-none");
-	}, 1000);
-	cftsr = token;
+window.setAuth = function(string) {
+	cftsr = string;
 }
-
-// Attach the function to the window object
-window.setToken = setToken;
 
 // Charts
 
@@ -299,7 +292,7 @@ function refresh() {
 		    crossDomain: true,
 		    jsonpCallback: "callback",
 		    headers: {
-				"brth-client-auth": cftsr
+			"brth-client-auth": cftsr
 		    },
 		    success: callback,
 		    error: failed
@@ -567,9 +560,7 @@ function refresh() {
 	}
 
 	function failed(xhr, ajaxOptions, thrownError) {
-		if (cftsr !== "NONE") {
-			showError('bg-danger', 'Connection failed (Error ' + xhr.status + ')');
-		}
+		showError('bg-danger', 'Connection failed (Error ' + xhr.status + ')');
 	}
 	
 }
