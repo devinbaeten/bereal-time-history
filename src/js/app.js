@@ -26,7 +26,7 @@ function setToken(token) {
 	$("#turnstileClearance").addClass("d-none");
 	setTimeout(function() {
 		begin();
-	}, 500);
+	}, 0);
 }
 
 // Attach the function to the window object
