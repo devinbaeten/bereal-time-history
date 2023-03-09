@@ -13,12 +13,9 @@ import Chart from 'chart.js/auto';
 
 var cftsr = "NONE";
 
-function setAuth(string) {
+export function setAuth(string) {
 	cftsr = string;
 }
-
-export { myFunction };
-
 // Charts
 
 // US-CENTRAL
