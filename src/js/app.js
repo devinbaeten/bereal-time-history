@@ -14,7 +14,7 @@ import Chart from 'chart.js/auto';
 var cftsr = "NONE";
 
 export function setAuth(string) {
-	cftsr = string;
+	cftsr = turnstile.getResponse();
 }
 // Charts
 
