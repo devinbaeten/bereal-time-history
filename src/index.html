@@ -18,7 +18,7 @@
 
 	  gtag('config', 'G-9ZECMCE1K5');
 	</script>
-	<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+	<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
 </head>
 <body>
 	<main>
@@ -38,10 +38,10 @@
 		</nav>
 		<div class="container mt-3 mb-5">
 			<div class="alert bg-warning" id="turnstileClearance">
-				<h2 class="mt-1">
-					One Moment...
-				</h2>
-				<span class="">In an effort to deter bots, we now require automatic validation of your browser when visiting this site. You may be required to complete a challenge as part of this process.</span>
+				<h4 class="mt-1">
+					Browser Check
+				</h4>
+				<span class="d-none">In an effort to deter bots, we now require automatic validation of your browser when visiting this site. You may be required to complete a challenge as part of this process.</span>
 				<div class="cf-turnstile mt-3" data-sitekey="0x4AAAAAAADDviGXS3cvoFLE" data-callback="tsComplete"></div>
 			</div>
 			<div class="alert alert-danger d-none">
@@ -50,7 +50,7 @@
 					 This site is actively being worked on at this very moment. Please excuse any issues as I work to improve your experience.
 				</span>
 			</div>
-			<div class="alert alert-primary">
+			<div class="alert alert-primary d-none">
 				<span>
 					<b>NEW:</b>
 					 Introducing the BeReal Time History API. You can now request an API key which enables access the full extent of my historical data, on-demand! Select the "API" tab below to get started.
@@ -738,13 +738,17 @@
 			</ul>
 			<p class="text-center fw-bold mb-0">This site is NOT officially affiliated with BeReal</p>
 			<p class="text-center text-secondary">Data is collected and provided for educational purposes only</p>
-			<p class="text-center text-muted">© 2023 Devin Baeten</p>
+			<p class="text-center text-muted mb-0">© 2023 Devin Baeten</p>
+			<p class="text-center text-muted mt-0" id="version"></p>
 		</footer>
 	</div>
 	<script type="module" src="./js/main.js"></script>
 	<script>
 		function tsComplete() {
 			setToken(turnstile.getResponse());
+			setTimeout(function() {
+				turnstile.reset();
+			}, 1800000);
 		}
 	</script>
 </body>

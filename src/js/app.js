@@ -8,17 +8,23 @@
 import $ from 'jquery';
 import moment from 'moment-timezone';
 import Chart from 'chart.js/auto';
+import { version } from '../../package.json';
+
+// Display version
+$("#version").html("v" + version + " &middot; <a class=\"text-muted\" target=\"blank\" href=\"https://github.com/devinbaeten/bereal-time-history/releases/tag/v" + version + "\">View on GitHub</a>");
 
 // Turnstile
-
 var cftsr = "NONE";
 
 function setToken(token) {
-	$("#dashboard").removeClass("opacity-25");
-	setTimeout(function() {
-		$("#turnstileClearance").addClass("d-none");
-	}, 1000);
 	cftsr = token;
+	setTimeout(function() {
+		$("#dashboard").addClass("opacity-25");
+		$("#turnstileClearance").removeClass("d-none");
+	}, 1800000);
+	$("#dashboard").removeClass("opacity-25");
+	$("#turnstileClearance").addClass("d-none");
+	begin();
 }
 
 // Attach the function to the window object
@@ -568,17 +574,27 @@ function refresh() {
 
 	function failed(xhr, ajaxOptions, thrownError) {
 		if (cftsr !== "NONE") {
-			showError('bg-danger', 'Connection failed (Error ' + xhr.status + ')');
+			switch (xhr.status) {
+				case 0:
+					showError('bg-danger', 'Network Error', 'Check your internet connection');
+				case 403:
+					showError('bg-danger', 'Access Denied', 'The server was unable to verify your request. Please refresh the page if this issue persists.');
+					break;
+				default:
+					showError('bg-danger', 'Server Error', 'An unknown error has occured. Please try again later. (' + xhr.status + ')');
+					break;
+			}
 		}
 	}
 	
 }
 
-function showError(css, text) {
+function showError(css, title, text) {
 	
 	$("#reqError").removeClass("d-none");
 	$("#reqError").addClass(css);
 	$("#reqError").text(text);
+	$("#reqError").prepend("<b>" + title + "</b><br/>");
 	
 	retries++;
 	
@@ -777,4 +793,3 @@ function refreshHistory() {
 	}
 	
 }
-begin();
