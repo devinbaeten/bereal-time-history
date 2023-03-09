@@ -10,3 +10,6 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 // Import code
 import './app.js';
 import './ko-fi.js';
+
+// Import CFT
+import { setauth } from './app.js';
