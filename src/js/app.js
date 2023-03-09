@@ -760,3 +760,5 @@ function refreshHistory() {
 	}
 	
 }
+
+begin();
