@@ -13,8 +13,8 @@ import Chart from 'chart.js/auto';
 
 var cftsr = "NONE";
 
-function cfAuthed() {
-	cftsr = turnstile.getResponse();
+window.setAuth = function(string) {
+	cftsr = string;
 }
 
 // Charts
@@ -766,5 +766,7 @@ function refreshHistory() {
 	function failed(xhr, ajaxOptions, thrownError) {
 		// window.location.reload();
 	}
+	
+	begin();
 	
 }
