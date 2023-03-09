@@ -12,4 +12,4 @@ import './app.js';
 import './ko-fi.js';
 
 // Import CFT
-import { setAuth } from './app.js';
+import { setauth } from './app.js';
