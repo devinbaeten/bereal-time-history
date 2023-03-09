@@ -9,6 +9,14 @@ import $ from 'jquery';
 import moment from 'moment-timezone';
 import Chart from 'chart.js/auto';
 
+// Turnstile
+
+var cftsr = "NONE";
+
+function cfAuthed() {
+	cftsr = turnstile.getResponse();
+}
+
 // Charts
 
 // US-CENTRAL
@@ -284,7 +292,7 @@ function refresh() {
 		    crossDomain: true,
 		    jsonpCallback: "callback",
 		    headers: {
-			"brth-client-auth": turnstile.getResponse()
+			"brth-client-auth": cftsr
 		    },
 		    success: callback,
 		    error: failed
@@ -592,7 +600,7 @@ function refreshHistory() {
 			crossDomain: true,
 			jsonpCallback: "callback",
             headers: {
-			    "brth-client-auth": turnstile.getResponse()
+			    "brth-client-auth": cftsr
 		    },
 			success: callback,
 			error: failed
@@ -760,5 +768,3 @@ function refreshHistory() {
 	}
 	
 }
-
-begin();
