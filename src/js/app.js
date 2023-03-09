@@ -767,6 +767,5 @@ function refreshHistory() {
 		// window.location.reload();
 	}
 	
-	begin();
-	
 }
+begin();
