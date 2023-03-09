@@ -8,6 +8,7 @@
 import $ from 'jquery';
 import moment from 'moment-timezone';
 import Chart from 'chart.js/auto';
+import turnstile from './turnstile.js';
 
 // Turnstile
 
