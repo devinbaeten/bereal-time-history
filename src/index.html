@@ -19,6 +19,11 @@
 	  gtag('config', 'G-9ZECMCE1K5');
 	</script>
 	<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+	<script defer>
+		function cfAuthed() {
+			setAuth(turnstile.getResponse());
+		}
+	</script>
 </head>
 <body>
 	<main>
