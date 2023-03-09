@@ -17,7 +17,7 @@ function setAuth(string) {
 	cftsr = string;
 }
 
-export { setAuth };
+export { myFunction };
 
 // Charts
 
