@@ -8,14 +8,16 @@
 import $ from 'jquery';
 import moment from 'moment-timezone';
 import Chart from 'chart.js/auto';
+import './turnstile.js';
 
 // Turnstile
 
 var cftsr = "NONE";
 
-function setAuth(string) {
+function cfAuthed() {
 	cftsr = turnstile.getResponse();
 }
+
 // Charts
 
 // US-CENTRAL
