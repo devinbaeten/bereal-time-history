@@ -24,7 +24,9 @@ function setToken(token) {
 	}, 1800000);
 	$("#dashboard").removeClass("opacity-25");
 	$("#turnstileClearance").addClass("d-none");
-	begin();
+	setTimeout(function() {
+		begin();
+	}, 500);
 }
 
 // Attach the function to the window object
