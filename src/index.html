@@ -18,6 +18,7 @@
 
 	  gtag('config', 'G-9ZECMCE1K5');
 	</script>
+	<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
 	<main>
@@ -36,6 +37,13 @@
 			</div>
 		</nav>
 		<div class="container mt-3 mb-5">
+			<div class="alert bg-warning" id="turnstileClearance">
+				<h2 class="mt-1">
+					One Moment...
+				</h2>
+				<span class="">In an effort to deter bots, we now require automatic validation of your browser when visiting this site. You may be required to complete a challenge as part of this process.</span>
+				<div class="cf-turnstile mt-3" data-sitekey="0x4AAAAAAADDviGXS3cvoFLE" data-callback="tsComplete"></div>
+			</div>
 			<div class="alert alert-danger d-none">
 				<span>
 					<b>Warning:</b>
@@ -59,7 +67,7 @@
 				</div>
 			</nav>
 			<div class="tab-content" id="nav-tabContent">
-				<div id="dashboard" class="tab-pane fade show active" role="tabpanel" aria-labelledby="nav-dashboard-tab" tabindex="0">
+				<div id="dashboard" class="tab-pane fade show active opacity-25" role="tabpanel" aria-labelledby="nav-dashboard-tab" tabindex="0">
 					<div class="card mb-3">
 						<div class="card-body">
 							<div class="hstack justify-content-between">
@@ -117,10 +125,10 @@
 									<div class="card p-2">
 										<div class="vstack text-center">
 											<span class="font-monospace fs-3" id="us_central_live_latest_ts">
-											00:00:00 XM
+											--:--:-- --
 											</span>
 											<span class="text-secondary small" id="us_central_live_latest_rel">
-											2m ago
+											-- ago
 											</span>
 										</div>
 									</div>
@@ -166,10 +174,10 @@
 									<div class="card p-2">
 										<div class="vstack text-center">
 											<span class="font-monospace fs-3" id="europe_west_live_latest_ts">
-											00:00:00 XM
+											--:--:-- --
 											</span>
 											<span class="text-secondary small" id="europe_west_live_latest_rel">
-											2m ago
+											-- ago
 											</span>
 										</div>
 									</div>
@@ -215,10 +223,10 @@
 									<div class="card p-2">
 										<div class="vstack text-center">
 											<span class="font-monospace fs-3" id="asia_east_live_latest_ts">
-											00:00:00 XM
+											--:--:-- --
 											</span>
 											<span class="text-secondary small" id="asia_east_live_latest_rel">
-											2m ago
+											-- ago
 											</span>
 										</div>
 									</div>
@@ -264,10 +272,10 @@
 									<div class="card p-2">
 										<div class="vstack text-center">
 											<span class="font-monospace fs-3" id="asia_west_live_latest_ts">
-											00:00:00 XM
+											--:--:-- --
 											</span>
 											<span class="text-secondary small" id="asia_west_live_latest_rel">
-											2m ago
+											-- ago
 											</span>
 										</div>
 									</div>
@@ -734,5 +742,10 @@
 		</footer>
 	</div>
 	<script type="module" src="./js/main.js"></script>
+	<script>
+		function tsComplete() {
+			setToken(turnstile.getResponse());
+		}
+	</script>
 </body>
 </html>
