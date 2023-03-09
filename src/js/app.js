@@ -13,11 +13,9 @@ import Chart from 'chart.js/auto';
 
 var cftsr = "NONE";
 
-function setAuth(string) {
+window.setAuth = function(string) {
 	cftsr = string;
 }
-
-export { setAuth };
 
 // Charts
 
