@@ -263,7 +263,7 @@ function begin() {
 	setupMoment();
 	
 	refresh();
-	refreshHistory();
+	setTimeout(refreshHistory, 500);
 	rtp();
 	setInterval(rtp, 100);
 	setInterval(refresh, 500);
