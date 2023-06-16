@@ -19,7 +19,7 @@
 	  gtag('config', 'G-9ZECMCE1K5');
 	</script>
 	<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
-  <script type="module" crossorigin src="/assets/index-fbe139d8.js"></script>
+  <script type="module" crossorigin src="/assets/index-29da9382.js"></script>
   <link rel="stylesheet" href="/assets/index-b1aa258f.css">
 </head>
 <body>
@@ -299,15 +299,17 @@
 
 									Historical Data
 								</h1>
-								<div class="vstack m-0 p-0 text-end">
-									<div>
+								<div class="hstack m-0 p-0 text-end">
+									<div class="hstack me-2">
 										<select id="timezoneSelect" class="form-select">
 											<option value="UTC" selected>UTC</option>
 										</select>
-										<a class="btn btn-outline-secondary" id="downloadButton" href="https://apis.devinbaeten.com/prod/app/bereal/api/moments/history/csv?tz=UTC">
-											<i class="bi bi-file-earmark-arrow-down-fill me-1"></i>
-											Export CSV
-										</a>
+										<div>
+											<a class="btn btn-outline-secondary" id="downloadButton" href="https://apis.devinbaeten.com/prod/app/bereal/api/moments/history/csv?tz=UTC">
+												<i class="bi bi-file-earmark-arrow-down-fill me-1"></i>
+												Export CSV
+											</a>
+										</div>
 									</div>
 								</div>
 							</div>
