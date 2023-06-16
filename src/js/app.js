@@ -12,13 +12,22 @@ import { version } from '../../package.json';
 
 $(document).ready(function() {
 	// Fetch the list of timezones from the API
-	$.getJSON('https://apis.devinbaeten.com/timezones', function(data) {
-		$.each(data, function(key, timezone) {
-			$('#timezoneSelect').append($('<option>', {
-				value: timezone,
-				text: timezone
-			}));
-		});
+	$.ajax({
+		url: 'https://apis.devinbaeten.com/timezones',
+		type: 'GET',
+		crossDomain: true,
+		dataType: 'json',
+		success: function(data) {
+			$.each(data, function(key, timezone) {
+				$('#timezoneSelect').append($('<option>', {
+					value: timezone,
+					text: timezone
+				}));
+			});
+		},
+		error: function() {
+			alert('Failed to retrieve time zones.');
+		}
 	});
 
 	// When the selected timezone changes, update the download link
