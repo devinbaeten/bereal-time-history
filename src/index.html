@@ -299,9 +299,11 @@
 								</h1>
 								<div class="vstack m-0 p-0 text-end">
 									<div>
-										<a class="btn btn-outline-secondary" href="https://apis.devinbaeten.com/prod/app/bereal/api/moments/history/csv">
+										<select id="timezoneSelect">
+											<option value="UTC" selected>UTC</option>
+										</select>
+										<a class="btn btn-outline-secondary" id="downloadButton" href="https://apis.devinbaeten.com/prod/app/bereal/api/moments/history/csv?tz=UTC">
 											<i class="bi bi-file-earmark-arrow-down-fill me-1"></i>
-
 											Export CSV
 										</a>
 									</div>
