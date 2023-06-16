@@ -12,7 +12,7 @@ import { version } from '../../package.json';
 
 $(document).ready(function() {
 	// Fetch the list of timezones from the API
-	$.getJSON('https://apis.devinbaeten.com/prod/app/bereal/api/timezones', function(data) {
+	$.getJSON('https://apis.devinbaeten.com/timezones', function(data) {
 		$.each(data, function(key, timezone) {
 			$('#timezoneSelect').append($('<option>', {
 				value: timezone,
