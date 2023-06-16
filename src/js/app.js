@@ -10,6 +10,24 @@ import moment from 'moment-timezone';
 import Chart from 'chart.js/auto';
 import { version } from '../../package.json';
 
+$(document).ready(function() {
+	// Fetch the list of timezones from the API
+	$.getJSON('https://apis.devinbaeten.com/prod/app/bereal/api/timezones', function(data) {
+		$.each(data, function(key, timezone) {
+			$('#timezoneSelect').append($('<option>', {
+				value: timezone,
+				text: timezone
+			}));
+		});
+	});
+
+	// When the selected timezone changes, update the download link
+	$('#timezoneSelect').on('change', function() {
+		const tz = this.value;
+		$('#downloadButton').attr('href', `https://apis.devinbaeten.com/prod/app/bereal/api/moments/history/csv?tz=${tz}`);
+	});
+});
+
 // Display version
 $("#version").html("v" + version + " &middot; <a class=\"text-muted\" target=\"blank\" href=\"https://github.com/devinbaeten/bereal-time-history/releases/tag/v" + version + "\">View on GitHub</a>");
 
