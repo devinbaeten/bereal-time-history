@@ -12,6 +12,10 @@ import { version } from '../../package.json';
 
 $(document).ready(function() {
 	// Fetch the list of timezones from the API
+	$('#timezoneSelect').append($('<option>', {
+		value: moment.tz.guess(),
+		text: `Local (${moment.tz.guess()})`
+	}));
 	$.ajax({
 		url: 'https://apis.devinbaeten.com/timezones',
 		type: 'GET',
