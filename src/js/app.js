@@ -26,7 +26,7 @@ $(document).ready(function() {
 			});
 		},
 		error: function() {
-			alert('Failed to retrieve time zones.');
+			console.log('Failed to retrieve time zones.');
 		}
 	});
 
