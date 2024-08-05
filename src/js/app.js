@@ -49,6 +49,11 @@ var cftsr = "NONE";
 
 function setToken(token) {
 	cftsr = token;
+	
+	// Update the "Live" icon to indicate connection
+	var liveTag = $("#live-tag");
+	liveTag.removeClass("bg-secondary").addClass("bg-danger").text("LIVE");
+
 	setTimeout(function() {
 		$("#dashboard").addClass("opacity-25");
 		$("#turnstileClearance").removeClass("d-none");
