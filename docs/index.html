@@ -19,7 +19,7 @@
 	  gtag('config', 'G-9ZECMCE1K5');
 	</script>
 	<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
-  <script type="module" crossorigin src="/assets/index-32ce0778.js"></script>
+  <script type="module" crossorigin src="/assets/index-2f3aef30.js"></script>
   <link rel="stylesheet" href="/assets/index-b1aa258f.css">
 </head>
 <body>
@@ -39,24 +39,20 @@
 			</div>
 		</nav>
 		<div class="container mt-3 mb-5">
-			<div class="alert bg-warning" id="turnstileClearance">
-				<h4 class="mt-1">
-					Browser Check
-				</h4>
-				<span class="d-none">In an effort to deter bots, we now require automatic validation of your browser when visiting this site. You may be required to complete a challenge as part of this process.</span>
-				<div class="cf-turnstile mt-3" data-sitekey="0x4AAAAAAADDviGXS3cvoFLE" data-callback="tsComplete"></div>
-			</div>
-			<div class="alert alert-danger d-none">
-				<span>
-					<b>Warning:</b>
-					 This site is actively being worked on at this very moment. Please excuse any issues as I work to improve your experience.
-				</span>
-			</div>
-			<div class="alert alert-primary">
-				<span>
-					<i class="bi bi-megaphone-fill"></i>
-					<b> New:</b> You can now visualize historical data beyond the past 90 days without an API key using Grafana dashboards. For more information, visit the Data tab.
-				</span>
+			<div id="alerts">
+				<div class="alert bg-warning" id="turnstileClearance">
+					<h4 class="mt-1">
+						Browser Check
+					</h4>
+					<span class="d-none">In an effort to deter bots, we now require automatic validation of your browser when visiting this site. You may be required to complete a challenge as part of this process.</span>
+					<div class="cf-turnstile mt-3" data-sitekey="0x4AAAAAAADDviGXS3cvoFLE" data-callback="tsComplete"></div>
+				</div>
+				<div class="alert alert-danger d-none">
+					<span>
+						<b>Warning:</b>
+						This site is actively being worked on at this very moment. Please excuse any issues as I work to improve your experience.
+					</span>
+				</div>
 			</div>
 			<div class="alert mb-3 bg-secondary text-light d-none">Today's planned maintenance has been cancelled.</div>
 			<div class="alert mb-3 bg-danger text-light d-none" id="reqError"></div>
@@ -773,7 +769,7 @@
 			</ul>
 			<p class="text-center fw-bold mb-0">This site is NOT officially affiliated with BeReal</p>
 			<p class="text-center text-secondary">Data is collected and provided for educational purposes only</p>
-			<p class="text-center text-muted mb-0">© 2024 Devin Baeten</p>
+			<p class="text-center text-muted mb-0">© 2025 Devin Baeten</p>
 			<p class="text-center text-muted mt-0" id="version"></p>
 		</footer>
 	</div>
