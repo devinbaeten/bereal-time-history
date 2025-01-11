@@ -39,10 +39,42 @@ $(document).ready(function() {
 		const tz = this.value;
 		$('#downloadButton').attr('href', `https://apis.devinbaeten.com/prod/app/bereal/api/moments/history/csv?tz=${tz}`);
 	});
+	
+	checkAlerts();
 });
 
 // Display version
 $("#version").html("v" + version + " &middot; <a class=\"text-muted\" target=\"blank\" href=\"https://github.com/devinbaeten/bereal-time-history/releases/tag/v" + version + "\">View on GitHub</a>");
+
+// Alerts
+function checkAlerts() {
+  $.ajax({
+	url: 'https://apis.devinbaeten.com/prod/app/bereal/api/alerts',
+	type: 'GET',
+	dataType: 'json',
+	crossDomain: true,
+	success: function(data) {
+	  if (data && data.alerts) {
+		data.alerts.forEach(function(alert) {
+		  // alert.class -> e.g. 'alert alert-primary'
+		  // alert.content -> e.g. 'Your HTML text content, icons, etc.'
+		  $('#alerts').append(`
+			<div class="${alert.class}">
+			  <span>
+				${alert.content}
+			  </span>
+			</div>
+		  `);
+		});
+	  }
+	},
+	error: function(xhr, status, error) {
+	  console.error('Failed to retrieve alerts:', error);
+	  // Optional: show a default alert if the request fails
+	  // $('#alerts').append('<div class="alert alert-danger">Could not load alerts.</div>');
+	}
+  });
+}
 
 // Turnstile
 var cftsr = "NONE";
