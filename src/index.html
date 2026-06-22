@@ -23,7 +23,7 @@
 <body>
 	<main>
 		<nav class="navbar bg-light">
-			<div class="container">
+			<div class="container-xxl">
 				<span class="navbar-brand mb-0 h1 hstack">
 					<img src="assets/logo.webp" alt="Logo" height="45px" class="me-2">
 					<div class="vstack">
@@ -36,7 +36,7 @@
 				</div>
 			</div>
 		</nav>
-		<div class="container mt-3 mb-5">
+		<div class="container-xxl mt-3 mb-5">
 			<div id="alerts">
 				<div class="alert bg-warning" id="turnstileClearance">
 					<h4 class="mt-1">
@@ -93,7 +93,7 @@
 							</div>
 							<span class="d-none">Tiles are updated in real-time. Press "Notify Me" to subscribe to alerts for a particular region, via Pushover.</span>
 							<div class="row align-items-start gap-2 p-2">
-								<div class="col-xl-2 card card-body gap-2" id="us_central_live_card">
+								<div class="col-md card card-body gap-2" id="us_central_live_card">
 									<div class="hstack justify-content-between">
 										<div class="vstack">
 											<h3 class="mb-0">Americas</h3>
@@ -142,7 +142,7 @@
 										<a class="btn btn-outline-secondary w-100 d-none">More Info</a>
 									</div>
 								</div>
-								<div class="col-xl-2 card card-body gap-2" id="europe_west_live_card">
+								<div class="col-md card card-body gap-2" id="europe_west_live_card">
 									<div class="hstack justify-content-between">
 										<div class="vstack">
 											<h3 class="mb-0">Europe</h3>
@@ -191,7 +191,7 @@
 										<a class="btn btn-outline-secondary w-100 d-none">More Info</a>
 									</div>
 								</div>
-								<div class="col-xl-2 card card-body gap-2" id="asia_east_live_card">
+								<div class="col-md card card-body gap-2" id="asia_east_live_card">
 									<div class="hstack justify-content-between">
 										<div class="vstack">
 											<h3 class="mb-0">East Asia</h3>
@@ -240,7 +240,7 @@
 										<a class="btn btn-outline-secondary w-100 d-none">More Info</a>
 									</div>
 								</div>
-								<div class="col-xl-2 card card-body gap-2" id="asia_west_live_card">
+								<div class="col-md card card-body gap-2" id="asia_west_live_card">
 									<div class="hstack justify-content-between">
 										<div class="vstack">
 											<h3 class="mb-0">West Asia</h3>
@@ -289,6 +289,55 @@
 										<a class="btn btn-outline-secondary w-100 d-none">More Info</a>
 									</div>
 								</div>
+								<div class="col-md card card-body gap-2" id="united_kingdom_live_card">
+									<div class="hstack justify-content-between">
+										<div class="vstack">
+											<h3 class="mb-0">United Kingdom</h3>
+											<i class="small text-secondary">
+												<i class="bi bi-clock"></i>
+
+												Europe/London
+											</i>
+										</div>
+										<div class="vstack">
+											<span class="text-secondary text-end" id="united_kingdom_live_clock">--:--:-- XM</span>
+											<span class="text-secondary text-end small">Current Time</span>
+										</div>
+									</div>
+									<div class="alert alert-danger fs-6 p-2 m-0 d-none" id="united_kingdom_live_alert_dy">
+										<i class="bi bi-exclamation-triangle-fill me-1"></i>
+
+										Delivered Yesterday
+									</div>
+									<div class="alert alert-success fs-6 p-2 m-0 d-none" id="united_kingdom_live_alert_dt">
+										<i class="bi bi-check-circle-fill me-1"></i>
+
+										Delivered Today
+									</div>
+									<div class="alert alert-warning fs-6 p-2 m-0 d-none text-center" id="united_kingdom_live_alert_ttbr">
+										<i class="bi bi-exclamation-triangle-fill me-1"></i>
+
+										Time to BeReal.
+										<i class="bi bi-exclamation-triangle-fill ms-1"></i>
+										<br/>
+										<span id="united_kingdom_live_alert_ttbr_clock" class="fw-bold fs-4">00:00</span>
+									</div>
+									<div class="card p-2">
+										<div class="vstack text-center">
+											<span class="font-monospace fs-3" id="united_kingdom_live_latest_ts">
+											--:--:-- --
+											</span>
+											<span class="text-secondary small" id="united_kingdom_live_latest_rel">
+											-- ago
+											</span>
+										</div>
+									</div>
+									<div class="hstack gap-2">
+										<a class="btn btn-outline-primary w-100 disabled" aria-disabled="true" href="#" target="blank">Notify Me</a>
+										<a class="btn btn-outline-secondary w-100" href="#ukChart" id="united_kingdom_live_cta">History</a>
+										<a class="btn btn-outline-secondary w-100 d-none">More Info</a>
+									</div>
+								</div>
 							</div>
 
 						</div>
@@ -334,6 +383,10 @@
 							</div>
 							<div class="card card-body mt-3">
 								<canvas id="awChart">
+								</canvas>
+							</div>
+							<div class="card card-body mt-3">
+								<canvas id="ukChart">
 								</canvas>
 							</div>
 							<div class="card card-body mt-3 d-none">
@@ -471,6 +524,24 @@
 													<th role="columnheader">West Asia</th>
 												</thead>
 												<tbody id="asia-west-history">
+													<tr>
+														<td>
+														Loading...
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+								<div class="col">
+									<div class="">
+										<div class="card-body">
+											<table class="table">
+												<thead>
+													<th role="columnheader">United Kingdom</th>
+												</thead>
+												<tbody id="united-kingdom-history">
 													<tr>
 														<td>
 														Loading...
@@ -698,7 +769,7 @@
 									  <tr>
 										<td>region</td>
 										<td>Yes</td>
-										<td>You can use any of these four supported regions: ["us-central", "europe-west", "asia-east", "asia-west"]</td>
+										<td>You can use any of these supported regions: ["us-central", "europe-west", "asia-east", "asia-west", "united-kingdom"]</td>
 									  </tr>
 									</tbody>
 								  </table>
@@ -755,7 +826,7 @@
 				</div>
 			</div>
 	</main>
-	<div class="container">
+	<div class="container-xxl">
 		<footer class="py-3 my-4">
 			<ul class="nav justify-content-center border-bottom pb-3 mb-3 d-none">
 				<li class="nav-item">
@@ -767,7 +838,7 @@
 			</ul>
 			<p class="text-center fw-bold mb-0">This site is NOT officially affiliated with BeReal</p>
 			<p class="text-center text-secondary">Data is collected and provided for educational purposes only</p>
-			<p class="text-center text-muted mb-0">© 2025 Devin Baeten</p>
+			<p class="text-center text-muted mb-0">© 2026 Devin Baeten</p>
 			<p class="text-center text-muted mt-0" id="version"></p>
 		</footer>
 	</div>

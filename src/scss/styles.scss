@@ -1,2 +1,10 @@
 // Import all of Bootstrap's CSS
 @import "~bootstrap/scss/bootstrap";
+
+// When a column doubles as `.card.card-body`, Bootstrap's later `.card-body`
+// rule clobbers the column flex sizing. Re-assert the column basis at md+.
+@media (min-width: 768px) {
+	.row > .col-md.card-body {
+		flex: 1 0 0%;
+	}
+}

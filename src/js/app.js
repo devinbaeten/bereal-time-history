@@ -322,6 +322,61 @@ var asiaWestChart = new Chart($('#awChart'), {
 	}
 });
 
+// UNITED-KINGDOM
+var unitedKingdomChartD = [];
+var unitedKingdomChart = new Chart($('#ukChart'), {
+	type: 'line',
+	data: {
+		datasets: [{
+			data: unitedKingdomChartD,
+			borderColor: 'rgba(39, 0, 81, .75)'
+		}]
+	},
+	options: {
+		responsive: true,
+		scales: {
+			y: {
+				type: 'linear',
+				position: 'left',
+				ticks: {
+					min: 0,
+					max: 86400000,
+					stepSize: 3.6e+6,
+					beginAtZero: true,
+					callback: value => {
+						let date = moment.utc(value);
+						if (date.diff(moment('1970-02-01 23:59:59'), 'minutes') === 0) {
+							return null;
+						}
+
+						return date.format('h A');
+					}
+				}
+			},
+			x: {
+				reverse: true
+			}
+		},
+		plugins: {
+			subtitle: {
+				display: true,
+				text: 'united-kingdom (Europe/London)'
+			},
+			legend: {
+				display: false
+			},
+			tooltip: {
+				callbacks: {
+					label: function(context) {
+						let ms = context.parsed.y
+						return moment.utc(ms).format("h:mm:ss a")
+					}
+				}
+			}
+		}
+	}
+});
+
 
 // Memory
 var retries = 0;
@@ -359,6 +414,7 @@ function rtp() {
 	$("#europe_west_live_clock").text(now.tz("Europe/Paris").format("h:mm:ss A"));
 	$("#asia_east_live_clock").text(now.tz("Australia/Sydney").format("h:mm:ss A"));
 	$("#asia_west_live_clock").text(now.tz("Asia/Karachi").format("h:mm:ss A"));
+	$("#united_kingdom_live_clock").text(now.tz("Europe/London").format("h:mm:ss A"));
 	
 }
 
@@ -619,9 +675,68 @@ function refresh() {
 			$("#asia_west_live_latest_rel").removeClass("text-light");
 			$("#asia_west_live_latest_rel").removeClass("text-danger");
 			$("#asia_west_live_latest_rel").removeClass("fw-bold");
-			
+
 		}
-		
+
+		if ($('#user_prefs_live_regional').is(':checked')) {
+			$("#united_kingdom_live_latest_ts").text(moment.utc(regions["united-kingdom"].utc).tz("Europe/London").format("h:mm:ss A"));
+		} else {
+			$("#united_kingdom_live_latest_ts").text(moment.utc(regions["united-kingdom"].utc).local().format("h:mm:ss A"));
+		}
+		$("#united_kingdom_live_latest_rel").text(moment.utc(regions["united-kingdom"].utc).tz("Europe/London").fromNow());
+		if (moment.utc(regions["united-kingdom"].utc).tz("Europe/London").isSame(moment().tz("Europe/London"), "day")) {
+			$("#united_kingdom_live_alert_dy").addClass("d-none");
+			$("#united_kingdom_live_alert_dt").removeClass("d-none");
+		} else {
+			$("#united_kingdom_live_alert_dy").removeClass("d-none");
+			$("#united_kingdom_live_alert_dt").addClass("d-none");
+		}
+		if (moment.utc().tz("Europe/London").unix() < (moment.utc(regions["united-kingdom"].utc).tz("Europe/London").unix() + 120)) {
+
+			// Special Styling
+
+			$("#united_kingdom_live_alert_dy").addClass("d-none");
+			$("#united_kingdom_live_alert_dt").addClass("d-none");
+			$("#united_kingdom_live_alert_ttbr").removeClass("d-none");
+
+			$("#united_kingdom_live_card").addClass("bg-dark");
+			$("#united_kingdom_live_card").addClass("text-light");
+
+			$("#united_kingdom_live_card .text-secondary").addClass("text-light");
+
+			$("#united_kingdom_live_latest_ts").addClass("text-dark");
+			$("#united_kingdom_live_latest_ts").addClass("fw-bold");
+
+			$("#united_kingdom_live_latest_rel").removeClass("text-light");
+			$("#united_kingdom_live_latest_rel").addClass("text-danger");
+			$("#united_kingdom_live_latest_rel").addClass("fw-bold");
+
+			// Clock
+
+			$("#united_kingdom_live_alert_ttbr_clock").text(moment.utc(((moment.utc(regions["united-kingdom"].utc).tz("Europe/London").unix() + 120) - moment.utc().tz("Europe/London").unix())*1000).format('mm:ss'));
+
+		} else {
+
+			$("#united_kingdom_live_alert_ttbr").addClass("d-none");
+
+			// Reset CSS
+
+			$("#united_kingdom_live_alert_ttbr").addClass("d-none");
+
+			$("#united_kingdom_live_card").removeClass("bg-dark");
+			$("#united_kingdom_live_card").removeClass("text-light");
+
+			$("#united_kingdom_live_card .text-secondary").removeClass("text-light");
+
+			$("#united_kingdom_live_latest_ts").removeClass("text-dark");
+			$("#united_kingdom_live_latest_ts").removeClass("fw-bold");
+
+			$("#united_kingdom_live_latest_rel").removeClass("text-light");
+			$("#united_kingdom_live_latest_rel").removeClass("text-danger");
+			$("#united_kingdom_live_latest_rel").removeClass("fw-bold");
+
+		}
+
 		hideError();
 
 		// us_central.eq(0).text(regions["us-central"].utc);
@@ -688,6 +803,7 @@ function refreshHistory() {
 	let europe_west = $("#europe-west-history");
 	let asia_east = $("#asia-east-history");
 	let asia_west = $("#asia-west-history");
+	let united_kingdom = $("#united-kingdom-history");
 	
 	$.ajax({
 			dataType: "json",
@@ -786,24 +902,50 @@ function refreshHistory() {
 				break;
 			case 'asia-west':
 				function addRow4(entry) {
-					
+
 					let utc = moment.utc(entry.utc).tz("Asia/Karachi");
 					let day = utc.format('YYYY-MM-DD');
 					let dayStart = moment.tz(day, "Asia/Karachi");
-					
+
 					let localDate = utc.format("YYYY-MM-DD");
 					let localTime = utc.format("hh:mm:ss");
 					let localMs = utc.diff(dayStart);
-					
+
 					asiaWestChartD.push({"x":localDate,"y":localMs});
-					
+
 				}
-				
+
 				asiaWestChartD = [];
 				data.forEach(addRow4);
 				setData4(asiaWestChart, asiaWestChartD);
-				
+
 				function setData4(chart, data) {
+					chart.data.datasets.forEach((dataset) => {
+						dataset.data = data;
+					});
+					chart.update();
+				}
+				break;
+			case 'united-kingdom':
+				function addRow5(entry) {
+
+					let utc = moment.utc(entry.utc).tz("Europe/London");
+					let day = utc.format('YYYY-MM-DD');
+					let dayStart = moment.tz(day, "Europe/London");
+
+					let localDate = utc.format("YYYY-MM-DD");
+					let localTime = utc.format("hh:mm:ss");
+					let localMs = utc.diff(dayStart);
+
+					unitedKingdomChartD.push({"x":localDate,"y":localMs});
+
+				}
+
+				unitedKingdomChartD = [];
+				data.forEach(addRow5);
+				setData5(unitedKingdomChart, unitedKingdomChartD);
+
+				function setData5(chart, data) {
 					chart.data.datasets.forEach((dataset) => {
 						dataset.data = data;
 					});
@@ -855,7 +997,11 @@ function refreshHistory() {
 		asia_west.empty();
 		asia_west.append(mkRows(regions["asia-west"]));
 		mkCharts(regions, 'asia-west');
-		
+
+		united_kingdom.empty();
+		united_kingdom.append(mkRows(regions["united-kingdom"]));
+		mkCharts(regions, 'united-kingdom');
+
 	}
 	
 	function failed(xhr, ajaxOptions, thrownError) {
