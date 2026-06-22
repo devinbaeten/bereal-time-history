@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>BeReal Time History API Reference</title>
+	<meta name="description" content="Interactive API reference for the BeReal Time History API. Real-time and historical BeReal moment data by region.">
+	<link rel="icon" type="image/x-icon" href="/assets/favicon-2634912e.ico">
+	<link rel="apple-touch-icon" href="/assets/ios-icon-332a38a8.webp">
+	<style>
+		html, body {
+			margin: 0;
+			padding: 0;
+			height: 100%;
+		}
+		#scalar-api-reference {
+			min-height: 100vh;
+		}
+	</style>
+</head>
+<body>
+	<div id="scalar-api-reference"></div>
+
+	<script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference"></script>
+	<script>
+		Scalar.createApiReference('#scalar-api-reference', {
+			url: '/openapi.yaml',
+			theme: 'purple',
+			layout: 'modern',
+			hideDarkModeToggle: false,
+			defaultHttpClient: {
+				targetKey: 'shell',
+				clientKey: 'curl'
+			},
+			metaData: {
+				title: 'BeReal Time History API Reference'
+			}
+		});
+	</script>
+</body>
+</html>

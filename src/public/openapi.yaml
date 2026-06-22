@@ -1,0 +1,551 @@
+openapi: 3.1.0
+info:
+  title: BeReal Time History API
+  version: "1.0.0"
+  summary: Real-time and historic BeReal moment data, by region.
+  description: |
+    The **BeReal Time History API** lets you integrate real-time and historical
+    BeReal "moment" notification data into your own projects.
+
+    A *moment* is the daily notification BeReal sends out in a given region. We
+    poll the BeReal API every five seconds and store new moments as they appear.
+    Data collection began in **September 2022** — earlier moments are not
+    available.
+
+    ## Authentication
+
+    Most endpoints require an API key, passed as the `api_key` query parameter.
+    Keys are bound to a usage plan with per-endpoint daily quotas (reset at
+    `00:00 UTC`).
+
+    ```
+    https://bereal.devin.rest/v1/moments/latest?api_key=YOUR_API_KEY
+    ```
+
+    [Request an API key](https://docs.google.com/forms/d/e/1FAIpQLSerjlOvXNCfDz7rq22HzuLr6JdME1ljDW5yiGzDyPXylzxCNQ/viewform)
+    or [request a webhook subscription](https://docs.google.com/forms/d/e/1FAIpQLSfwt4KNDDTGsGWxbSFkDWRAgKypEh4ApywVXyi8x2FkB4DlQw/viewform)
+    to get started.
+
+    ## Regions
+
+    | Identifier | Coverage | Origin time zone |
+    | --- | --- | --- |
+    | `us-central` | Americas | `America/Chicago` |
+    | `europe-west` | Europe | `Europe/Paris` |
+    | `asia-east` | East Asia / Oceania | `Australia/Sydney` |
+    | `asia-west` | West / South Asia | `Asia/Karachi` |
+    | `united-kingdom` | United Kingdom | `Europe/London` |
+
+    ## Rate Limits
+
+    Daily per-endpoint quotas are enforced based on your plan. When you hit a
+    quota you'll receive a `429 Too Many Requests` response. Quotas reset at
+    `00:00 UTC`.
+
+    > This API is **not officially affiliated with BeReal**. Data is provided
+    > for educational purposes only.
+  contact:
+    name: Devin Baeten
+    email: devin@devincreative.pro
+    url: https://bereal.devin.fun
+  license:
+    name: Educational use only
+servers:
+  - url: https://bereal.devin.rest
+    description: Production
+tags:
+  - name: Moments
+    description: |
+      Endpoints for fetching BeReal moment notifications — the latest moment
+      per region, historical moments, and date-specific lookups.
+  - name: Info
+    description: Metadata endpoints describing the API's capabilities.
+  - name: System
+    description: Health and status endpoints.
+security:
+  - ApiKeyQuery: []
+paths:
+  /v1/moments/latest:
+    get:
+      tags:
+        - Moments
+      summary: Get the latest moment in every region
+      description: |
+        Returns the most recent moment for each supported region, along with the
+        server's current time. Useful for live dashboards and "did the moment
+        drop yet?" checks.
+      operationId: getLatestMoments
+      security:
+        - ApiKeyQuery: []
+      responses:
+        "200":
+          description: Latest moment per region.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LatestMomentsResponse"
+              examples:
+                latest:
+                  summary: A typical response
+                  value:
+                    regions:
+                      us-central:
+                        id: MIB0Amg220yP7m0Te-p9s
+                        ts: "1677871105"
+                        utc: "2023-03-03 19:18:25"
+                      europe-west:
+                        id: CMDRw4EAAVJbz7LQLt35w
+                        ts: "1677846583"
+                        utc: "2023-03-03 12:29:43"
+                      asia-west:
+                        id: ZzR8YsOxZ6N-5JIY69UUw
+                        ts: "1677837621"
+                        utc: "2023-03-03 10:00:21"
+                      asia-east:
+                        id: GSB1g5Ef39pRsdL0VZfPB
+                        ts: "1677886896"
+                        utc: "2023-03-03 23:41:36"
+                      united-kingdom:
+                        id: A4B1g5Ef39pRsdL0VZfYK
+                        ts: "1677886896"
+                        utc: "2023-03-03 23:41:36"
+                    now:
+                      ts: 1677897828
+                      utc: "2023-03-04 02:43:48"
+        "400":
+          $ref: "#/components/responses/MissingApiKey"
+        "401":
+          $ref: "#/components/responses/InvalidApiKey"
+        "429":
+          $ref: "#/components/responses/RateLimited"
+  /v1/moments/all:
+    get:
+      tags:
+        - Moments
+      summary: Get historical moments per region
+      description: |
+        Returns recent (or all) moments per region. Response can be served as
+        JSON or as a downloadable CSV. The default is the **last 90 moments**
+        per region.
+
+        Set `limit=NONE` to return the full history (use sparingly — the
+        response can be large).
+      operationId: getAllMoments
+      security:
+        - ApiKeyQuery: []
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          description: |
+            Maximum number of moments returned **per region**, most recent
+            first. Accepts a positive integer, or the literal `NONE` to disable
+            the limit. Defaults to `90`.
+          schema:
+            oneOf:
+              - type: integer
+                minimum: 1
+                example: 30
+              - type: string
+                enum: [NONE]
+          example: 90
+        - name: format
+          in: query
+          required: false
+          description: Response format. `JSON` (default) or `CSV` (file download).
+          schema:
+            type: string
+            enum: [JSON, CSV]
+            default: JSON
+      responses:
+        "200":
+          description: Historical moments per region.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AllMomentsResponse"
+              examples:
+                truncated:
+                  summary: A truncated response (90 per region by default)
+                  value:
+                    regions:
+                      us-central:
+                        - id: MIB0Amg220yP7m0Te-p9s
+                          ts: "1677871105"
+                          utc: "2023-03-03 19:18:25"
+                        - id: jzB1g5Ef39pRsdL0VZfPB
+                          ts: "1677785045"
+                          utc: "2023-03-02 19:24:05"
+                      europe-west:
+                        - id: CMDRw4EAAVJbz7LQLt35w
+                          ts: "1677846583"
+                          utc: "2023-03-03 12:29:43"
+                      asia-east:
+                        - id: GSB1g5Ef39pRsdL0VZfPB
+                          ts: "1677886896"
+                          utc: "2023-03-03 23:41:36"
+                      asia-west:
+                        - id: ZzR8YsOxZ6N-5JIY69UUw
+                          ts: "1677837621"
+                          utc: "2023-03-03 10:00:21"
+                      united-kingdom:
+                        - id: A4B1g5Ef39pRsdL0VZfYK
+                          ts: "1677886896"
+                          utc: "2023-03-03 23:41:36"
+            text/csv:
+              schema:
+                type: string
+                description: |
+                  CSV with columns `Moment ID,Region,UNIX Timestamp,UTC Timestamp`.
+              example: |
+                Moment ID,Region,UNIX Timestamp,UTC Timestamp
+                MIB0Amg220yP7m0Te-p9s,us-central,1677871105,2023-03-03 19:18:25
+                CMDRw4EAAVJbz7LQLt35w,europe-west,1677846583,2023-03-03 12:29:43
+        "400":
+          $ref: "#/components/responses/MissingApiKey"
+        "401":
+          $ref: "#/components/responses/InvalidApiKey"
+        "429":
+          $ref: "#/components/responses/RateLimited"
+  /v1/moments/lookup:
+    get:
+      tags:
+        - Moments
+      summary: Look up the moment for a specific region and date
+      description: |
+        Returns the single moment that occurred on a given calendar date within
+        a given time zone for the requested region. The date is interpreted in
+        the supplied `time_zone`, while the timestamps in the response are
+        provided in both UTC and the localized time zone.
+
+        If no data is available for the supplied combination (for example, the
+        date is before data collection began or the moment hasn't happened
+        yet), `id` will be `NO_DATA` and the timestamps will be `null`.
+      operationId: lookupMoment
+      security:
+        - ApiKeyQuery: []
+      parameters:
+        - name: region
+          in: query
+          required: true
+          description: Region identifier.
+          schema:
+            $ref: "#/components/schemas/Region"
+          example: us-central
+        - name: date
+          in: query
+          required: true
+          description: |
+            Calendar date in `YYYY-MM-DD` format, interpreted in the supplied
+            `time_zone`.
+          schema:
+            type: string
+            format: date
+          example: "2023-03-04"
+        - name: time_zone
+          in: query
+          required: true
+          description: |
+            IANA time zone name used to interpret `date`. The full list of
+            accepted values is available from
+            [`/v1/info/supported_time_zones`](#tag/info/get/v1/info/supported_time_zones).
+          schema:
+            type: string
+          example: America/Chicago
+      responses:
+        "200":
+          description: The moment for the supplied region/date.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LookupMomentResponse"
+              examples:
+                found:
+                  summary: Moment found
+                  value:
+                    region: us-central
+                    id: fz6OtUFp_elQJrGB2Rxkh
+                    UTC:
+                      unix: 1677963232
+                      timestamp: "2023-03-04 20:53:52"
+                    localized:
+                      timezone: America/Chicago
+                      timestamp: "2023-03-04 14:53:52"
+                no_data:
+                  summary: No moment available for that date
+                  value:
+                    region: us-central
+                    id: NO_DATA
+                    UTC:
+                      unix: null
+                      timestamp: null
+                    localized:
+                      timezone: null
+                      timestamp: null
+        "400":
+          description: Missing or invalid parameter.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                missingDate:
+                  summary: Missing `date`
+                  value:
+                    error:
+                      authorized: false
+                      reason: Date parameter missing.
+                invalidTimezone:
+                  summary: Unknown `time_zone`
+                  value:
+                    error:
+                      authorized: false
+                      reason: You provided an invalid time zone. Refer to the API documentation for a list of supported timezones.
+                invalidRegion:
+                  summary: Unknown `region`
+                  value:
+                    error:
+                      authorized: false
+                      reason: Invalid Region. Check the API documentation for the list of available regions and their identifiers.
+        "401":
+          $ref: "#/components/responses/InvalidApiKey"
+        "429":
+          $ref: "#/components/responses/RateLimited"
+  /v1/info/supported_time_zones:
+    get:
+      tags:
+        - Info
+      summary: List supported time zones
+      description: |
+        Returns the full list of IANA time zone identifiers accepted by
+        `/v1/moments/lookup`. The list is sourced directly from the
+        underlying database's `mysql.time_zone_name` table.
+
+        This endpoint does **not** require an API key.
+      operationId: getSupportedTimeZones
+      security: []
+      responses:
+        "200":
+          description: Array of supported IANA time zone identifiers.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                example:
+                  - UTC
+                  - America/Chicago
+                  - America/Los_Angeles
+                  - Europe/Paris
+                  - Europe/London
+                  - Asia/Karachi
+                  - Australia/Sydney
+  /v1/status:
+    get:
+      tags:
+        - System
+      summary: Health check
+      description: |
+        Returns the current health of the API's backing database. Intended for
+        uptime monitoring. No API key required.
+      operationId: getStatus
+      security: []
+      responses:
+        "200":
+          description: Database health snapshot.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  databaseIsFunctional:
+                    type: boolean
+                    description: |
+                      `true` when the API can read from the database backing
+                      the moments table.
+                required: [databaseIsFunctional]
+              example:
+                databaseIsFunctional: true
+components:
+  securitySchemes:
+    ApiKeyQuery:
+      type: apiKey
+      in: query
+      name: api_key
+      description: |
+        Per-project API key issued by the maintainer. Pass it on every
+        authenticated request as the `api_key` query parameter.
+  schemas:
+    Region:
+      type: string
+      description: Supported region identifier.
+      enum:
+        - us-central
+        - europe-west
+        - asia-east
+        - asia-west
+        - united-kingdom
+    Moment:
+      type: object
+      description: A single BeReal moment notification.
+      properties:
+        id:
+          type: string
+          description: BeReal-assigned moment ID.
+          example: MIB0Amg220yP7m0Te-p9s
+        ts:
+          type: string
+          description: UNIX timestamp (seconds) as a string.
+          example: "1677871105"
+        utc:
+          type: string
+          description: UTC timestamp in `YYYY-MM-DD HH:MM:SS` format.
+          example: "2023-03-03 19:18:25"
+      required: [id, ts, utc]
+    LatestMomentsResponse:
+      type: object
+      properties:
+        regions:
+          type: object
+          description: The most recent moment per region.
+          properties:
+            us-central:
+              $ref: "#/components/schemas/Moment"
+            europe-west:
+              $ref: "#/components/schemas/Moment"
+            asia-east:
+              $ref: "#/components/schemas/Moment"
+            asia-west:
+              $ref: "#/components/schemas/Moment"
+            united-kingdom:
+              $ref: "#/components/schemas/Moment"
+          required:
+            - us-central
+            - europe-west
+            - asia-east
+            - asia-west
+            - united-kingdom
+        now:
+          type: object
+          description: The server's current time.
+          properties:
+            ts:
+              type: integer
+              description: UNIX timestamp (seconds).
+              example: 1677897828
+            utc:
+              type: string
+              description: UTC timestamp in `YYYY-MM-DD HH:MM:SS` format.
+              example: "2023-03-04 02:43:48"
+          required: [ts, utc]
+      required: [regions, now]
+    AllMomentsResponse:
+      type: object
+      properties:
+        regions:
+          type: object
+          description: Arrays of moments per region, most recent first.
+          properties:
+            us-central:
+              type: array
+              items:
+                $ref: "#/components/schemas/Moment"
+            europe-west:
+              type: array
+              items:
+                $ref: "#/components/schemas/Moment"
+            asia-east:
+              type: array
+              items:
+                $ref: "#/components/schemas/Moment"
+            asia-west:
+              type: array
+              items:
+                $ref: "#/components/schemas/Moment"
+            united-kingdom:
+              type: array
+              items:
+                $ref: "#/components/schemas/Moment"
+          required:
+            - us-central
+            - europe-west
+            - asia-east
+            - asia-west
+            - united-kingdom
+      required: [regions]
+    LookupMomentResponse:
+      type: object
+      properties:
+        region:
+          $ref: "#/components/schemas/Region"
+        id:
+          type: string
+          description: Moment ID, or `NO_DATA` when no moment is available.
+          example: fz6OtUFp_elQJrGB2Rxkh
+        UTC:
+          type: object
+          properties:
+            unix:
+              type: [integer, "null"]
+              example: 1677963232
+            timestamp:
+              type: [string, "null"]
+              example: "2023-03-04 20:53:52"
+          required: [unix, timestamp]
+        localized:
+          type: object
+          properties:
+            timezone:
+              type: [string, "null"]
+              example: America/Chicago
+            timestamp:
+              type: [string, "null"]
+              example: "2023-03-04 14:53:52"
+          required: [timezone, timestamp]
+      required: [region, id, UTC, localized]
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            authorized:
+              type: boolean
+              example: false
+            reason:
+              type: string
+              example: An API Key is required. You can request one at https://bereal.devin.fun/
+          required: [authorized, reason]
+      required: [error]
+  responses:
+    MissingApiKey:
+      description: An API key was not supplied.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            error:
+              authorized: false
+              reason: An API Key is required. You can request one at https://bereal.devin.fun/
+    InvalidApiKey:
+      description: The API key is missing, unknown, or inactive.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            error:
+              authorized: false
+              reason: Your API Key is invalid or inactive.
+    RateLimited:
+      description: Daily per-endpoint quota exceeded. Resets at `00:00 UTC`.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            error:
+              authorized: false
+              reason: You have reached your daily limit for this endpoint (1000 of 1000). Your quota will reset at 00:00 UTC. Contact the developer if you need a limit increase.
